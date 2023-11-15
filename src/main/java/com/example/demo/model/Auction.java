@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class Auction {
    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)
+    @JsonBackReference
    private Player player;
    private  double startPrice;
    private double currentPrice;
@@ -31,11 +33,6 @@ public class Auction {
 
    private LocalDateTime endAt;
    private LocalDateTime createdAt;
-
-
-
-
-
 
 
 }
