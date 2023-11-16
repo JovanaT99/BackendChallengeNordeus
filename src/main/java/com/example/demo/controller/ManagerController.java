@@ -22,9 +22,9 @@ public class ManagerController {
     }
 
 
-    @GetMapping("/{managerId}/auctions")
-        public List<Auction> getManagerAuctions() {
-            return auctionRepository.findAllForManager();
-        }
-
+//    @GetMapping("/{managerId}/auctions")
+//        public List<Auction> getManagerAuctions() {
+//            return auctionRepository.findAllForManager();
+//        }
+//
 }

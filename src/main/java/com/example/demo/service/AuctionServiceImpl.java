@@ -78,9 +78,6 @@ public class AuctionServiceImpl implements AuctionService {
             followRepository.save(follow);
 
         }
-
-
-
         return bid;
     }
 
@@ -113,13 +110,6 @@ public class AuctionServiceImpl implements AuctionService {
         followRepository.save(follow);
         return follow;
     }
-
-
-
-
-
-
-
 
 
 

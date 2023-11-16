@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -23,11 +24,16 @@ public class AuctionController {
         this.auctionRepository = auctionRepository;
         this.auctionService = auctionService;
     }
-    @GetMapping
-    public List<Auction> getAllAuctions() {
-        return auctionRepository.findAll();
+//    @GetMapping
+//    public List<Auction> getAllAuctions() {
+//        return auctionRepository.findAll();
+//    }
+@GetMapping("/active")
+    public List<Auction> getAuctionsEndAtAfterCurrentTime() {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return auctionRepository.findByEndAtAfter(currentTime);
     }
-    //ovde
+
 
     @PostMapping("/{auctionId}/bid")
     public ResponseEntity<Bid> postaviPonudu(
@@ -59,9 +65,5 @@ public class AuctionController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Došlo je do greške prilikom postavljanja ponude.");
         }
     }
-
-
-
-
 
 }
