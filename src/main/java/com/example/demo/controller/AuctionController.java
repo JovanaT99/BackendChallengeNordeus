@@ -66,10 +66,10 @@ public class AuctionController {
         }
     }
 
-    @GetMapping("/{managerId}/auctions")
+    @GetMapping("/manager/{managerId}/auctions")
     public List<Auction> getAllAuctionsForManager(@PathVariable Long managerId) {
         LocalDateTime currentTime = LocalDateTime.now();
-        return auctionRepository.findAllForManager(managerId, currentTime);
+        return auctionRepository.findAllForManager(managerId,currentTime);
     }
 
 }
