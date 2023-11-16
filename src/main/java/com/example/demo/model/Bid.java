@@ -28,12 +28,4 @@ public class Bid {
     private LocalDateTime createdAt;
 
 
-
-
-
-
-
-
-
-
 }

@@ -11,9 +11,13 @@ import com.example.demo.repository.ManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,7 +34,7 @@ public class AuctionServiceImpl implements AuctionService {
     public AuctionServiceImpl(AuctionRepository auctionRepository, BidRepository bidRepository, ManagerRepository managerRepository, FollowRepository followRepository) {
         this.auctionRepository = auctionRepository;
         this.bidRepository = bidRepository;
-        this.managerRepository=managerRepository;
+        this.managerRepository = managerRepository;
         this.followRepository = followRepository;
     }
 
@@ -62,17 +66,17 @@ public class AuctionServiceImpl implements AuctionService {
         bidRepository.save(bid);
 
 
-        auction.setCurrentPrice(auction.getCurrentPrice()+1);
-        if(isAuctionLastFiveSecond(auction))    {
+        auction.setCurrentPrice(auction.getCurrentPrice() + 1);
+        if (isAuctionLastFiveSecond(auction)) {
             System.out.println("test");
-         auction.setEndAt(LocalDateTime.now().plusSeconds(5));
- }
+            auction.setEndAt(LocalDateTime.now().plusSeconds(5));
+        }
 
         auctionRepository.save(auction);
 
-        Optional<Follow> optionalFollow = followRepository.findByAuctionIdAndManagerId(auctionId,managerId);
+        Optional<Follow> optionalFollow = followRepository.findByAuctionIdAndManagerId(auctionId, managerId);
         if (optionalFollow.isEmpty()) {
-            Follow follow=new Follow();
+            Follow follow = new Follow();
             follow.setAuction(auction);
             follow.setManager(manager);
             followRepository.save(follow);
@@ -92,7 +96,7 @@ public class AuctionServiceImpl implements AuctionService {
         if (optionalManager.isEmpty()) {
             throw new IllegalArgumentException("Manager sa datim ID-om ne postoji.");
         }
-        Optional<Follow> optionalFollow = followRepository.findByAuctionIdAndManagerId(auctionId,managerId);
+        Optional<Follow> optionalFollow = followRepository.findByAuctionIdAndManagerId(auctionId, managerId);
         if (optionalFollow.isPresent()) {
             throw new IllegalArgumentException("Follow vec postoji.");
         }
@@ -104,13 +108,12 @@ public class AuctionServiceImpl implements AuctionService {
             throw new IllegalStateException("Aukcija je već završena.");
         }
 
-       Follow follow=new Follow();
+        Follow follow = new Follow();
         follow.setAuction(auction);
         follow.setManager(manager);
         followRepository.save(follow);
         return follow;
     }
-
 
 
     private boolean isAuctionActive(Auction auction) {

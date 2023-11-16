@@ -9,7 +9,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 
-
 @Getter
 @Data
 @AllArgsConstructor
@@ -19,20 +18,20 @@ import java.time.LocalDateTime;
 @Table
 public class Auction {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)
     @JsonBackReference
-   private Player player;
-   private  double startPrice;
-   private double currentPrice;
-   private String status;
-   private LocalDateTime startAt;
+    private Player player;
+    private double startPrice;
+    private double currentPrice;
+    private String status;
+    private LocalDateTime startAt;
 
-   private LocalDateTime endAt;
-   private LocalDateTime createdAt;
+    private LocalDateTime endAt;
+    private LocalDateTime createdAt;
 
 
 }

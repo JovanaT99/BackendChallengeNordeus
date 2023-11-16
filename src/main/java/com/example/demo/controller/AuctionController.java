@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+
 import com.example.demo.model.Auction;
 import com.example.demo.model.Bid;
 import com.example.demo.model.Follow;
@@ -19,16 +20,15 @@ public class AuctionController {
 
     private final AuctionRepository auctionRepository;
     private final AuctionService auctionService;
+
     @Autowired
     public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService) {
         this.auctionRepository = auctionRepository;
         this.auctionService = auctionService;
     }
-//    @GetMapping
-//    public List<Auction> getAllAuctions() {
-//        return auctionRepository.findAll();
-//    }
-@GetMapping("/active")
+
+
+    @GetMapping("/active")
     public List<Auction> getAuctionsEndAtAfterCurrentTime() {
         LocalDateTime currentTime = LocalDateTime.now();
         return auctionRepository.findByEndAtAfter(currentTime);
@@ -41,7 +41,7 @@ public class AuctionController {
             @RequestParam Long managerId) {
 
         try {
-            Bid bid=auctionService.placeBid(auctionId, managerId);
+            Bid bid = auctionService.placeBid(auctionId, managerId);
             return ResponseEntity.ok(bid);
         } catch (IllegalArgumentException | IllegalStateException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -57,13 +57,19 @@ public class AuctionController {
             @RequestParam Long managerId) {
 
         try {
-            Follow follow=auctionService.placeFollow(auctionId, managerId);
+            Follow follow = auctionService.placeFollow(auctionId, managerId);
             return ResponseEntity.ok(follow);
         } catch (IllegalArgumentException | IllegalStateException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Došlo je do greške prilikom postavljanja ponude.");
         }
+    }
+
+    @GetMapping("/{managerId}/auctions")
+    public List<Auction> getAllAuctionsForManager(@PathVariable Long managerId) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return auctionRepository.findAllForManager(managerId, currentTime);
     }
 
 }
