@@ -3,7 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.model.Auction;
 import com.example.demo.model.Bid;
 import com.example.demo.model.Follow;
+import com.example.demo.model.Player;
 import com.example.demo.repository.AuctionRepository;
+import com.example.demo.repository.PlayerRepository;
 import com.example.demo.service.AuctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,24 +17,33 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auctions")
+//@RequestMapping("/auctions")
 public class AuctionController {
 
     private final AuctionRepository auctionRepository;
     private final AuctionService auctionService;
 
+    private final PlayerRepository playerRepository;
+
     @Autowired
-    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService) {
+    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService, PlayerRepository playerRepository) {
         this.auctionRepository = auctionRepository;
         this.auctionService = auctionService;
+        this.playerRepository = playerRepository;
     }
 
 
-    @GetMapping("/active")
+    @GetMapping("/auctions")
     public List<Auction> getAuctionsEndAtAfterCurrentTime() {
         LocalDateTime currentTime = LocalDateTime.now();
         return auctionRepository.findByEndAtAfter(currentTime);
     }
+
+    @GetMapping("/player")
+    public List<Player> findAll() {
+        return playerRepository.findAll();
+    }
+
 
 
     @PostMapping("/{auctionId}/bid")
