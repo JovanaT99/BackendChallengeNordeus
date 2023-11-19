@@ -20,6 +20,11 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     List<Auction> findAllForManager(@Param("managerId") Long managerId, @Param("currentTime") LocalDateTime currentTime);
 
 
+    @Query("SELECT a FROM Auction a " +
+            "JOIN FETCH a.player " +
+            "WHERE a.status = :status")
+    List<Auction> findByStatus(String status);
+
 }
 
 

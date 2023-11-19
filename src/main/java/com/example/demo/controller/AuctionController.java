@@ -7,6 +7,7 @@ import com.example.demo.model.Player;
 import com.example.demo.repository.AuctionRepository;
 import com.example.demo.repository.PlayerRepository;
 import com.example.demo.service.AuctionService;
+import com.example.demo.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/auctions")
+@RequestMapping("/auctions")
 public class AuctionController {
 
     private final AuctionRepository auctionRepository;
@@ -25,16 +26,20 @@ public class AuctionController {
 
     private final PlayerRepository playerRepository;
 
+    private final MailService mailService;
+
     @Autowired
-    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService, PlayerRepository playerRepository) {
+    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService, PlayerRepository playerRepository, MailService mailService) {
         this.auctionRepository = auctionRepository;
         this.auctionService = auctionService;
         this.playerRepository = playerRepository;
+        this.mailService = mailService;
     }
 
 
-    @GetMapping("/auctions")
+    @GetMapping
     public List<Auction> getAuctionsEndAtAfterCurrentTime() {
+        mailService.sendTextEmail("jovanablagojevic98@gmail.com","test","testing");
         LocalDateTime currentTime = LocalDateTime.now();
         return auctionRepository.findByEndAtAfter(currentTime);
     }
@@ -61,7 +66,6 @@ public class AuctionController {
         }
     }
 
-
     @PostMapping("/{auctionId}/follow")
     public ResponseEntity<Follow> postaviFollow(
             @PathVariable Long auctionId,
@@ -77,10 +81,6 @@ public class AuctionController {
         }
     }
 
-    @GetMapping("/manager/{managerId}/auctions")
-    public List<Auction> getAllAuctionsForManager(@PathVariable Long managerId) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        return auctionRepository.findAllForManager(managerId,currentTime);
-    }
+
 
 }

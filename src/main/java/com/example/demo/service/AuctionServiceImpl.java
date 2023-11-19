@@ -28,14 +28,16 @@ public class AuctionServiceImpl implements AuctionService {
     private final ManagerRepository managerRepository;
 
     private final FollowRepository followRepository;
+    private final MailService mailService;
 
 
     @Autowired
-    public AuctionServiceImpl(AuctionRepository auctionRepository, BidRepository bidRepository, ManagerRepository managerRepository, FollowRepository followRepository) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository, BidRepository bidRepository, ManagerRepository managerRepository, FollowRepository followRepository, MailService mailService) {
         this.auctionRepository = auctionRepository;
         this.bidRepository = bidRepository;
         this.managerRepository = managerRepository;
         this.followRepository = followRepository;
+        this.mailService = mailService;
     }
 
     @Override
@@ -49,7 +51,6 @@ public class AuctionServiceImpl implements AuctionService {
         if (optionalManager.isEmpty()) {
             throw new IllegalArgumentException("Manager sa datim ID-om ne postoji.");
         }
-
 
         Auction auction = optionalAuction.get();
         Manager manager = optionalManager.get();
@@ -68,7 +69,6 @@ public class AuctionServiceImpl implements AuctionService {
 
         auction.setCurrentPrice(auction.getCurrentPrice() + 1);
         if (isAuctionLastFiveSecond(auction)) {
-            System.out.println("test");
             auction.setEndAt(LocalDateTime.now().plusSeconds(5));
         }
 
@@ -81,6 +81,22 @@ public class AuctionServiceImpl implements AuctionService {
             follow.setManager(manager);
             followRepository.save(follow);
 
+        }
+
+        List<Manager> allManagers = managerRepository.findManagersFollowingAuction(auctionId);
+//        System.out.println("Other"+allManagers.size());
+
+        for (Manager otherManager : allManagers) {
+            // Ne šalji email manageru koji je postavio ponudu
+            if (otherManager.getId().equals(managerId)) {
+                continue;
+            }
+            System.out.println("Send " + otherManager.getEmail());
+            mailService.sendTextEmail(
+                    otherManager.getEmail(),
+                    "New bid on auction you follow (" + auction.getPlayer().getName() + ")",
+                    "There is new bid for " + bid.getPrice() + " by manager " + manager.getName()
+            );
         }
         return bid;
     }

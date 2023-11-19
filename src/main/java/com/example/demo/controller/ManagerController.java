@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -20,5 +21,9 @@ import java.util.List;
 public class ManagerController {
     private final AuctionRepository auctionRepository;
 
-
+    @GetMapping("{managerId}/auctions")
+    public List<Auction> getAllAuctionsForManager(@PathVariable Long managerId) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return auctionRepository.findAllForManager(managerId,currentTime);
+    }
 }
