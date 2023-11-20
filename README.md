@@ -1,28 +1,28 @@
 # Nordeus BackendChallenge
 ## Description
-This is Java Spring Boot Backend created for Nordeus Backend Challenge at Job Fair 2023.
+This is Java Spring Boot Backend created for the Nordeus Backend Challenge at Job Fair 2023.
 Requirements for this backend were to create API that will allow users (managers) to:
-- Get list of active auctions
+- Get the list of active auctions
 - Join an auction
 - Bid on an auction
  
-Backend should also:
+The backend should also:
 - Generate new auctions automatically every 10 minutes
 - Notify users about:
     - End of auction
     - New bid places on auction they follow
     - New auctions 
  
-*Note: Other systems like: authentification, caching, deployment (dokcer) etc were not required.*
+*Note: Other systems like authentification, caching, deployment (docker) etc were not required.*
  
-## Implementation overview
-There Auctions, Managers, Players and Bids.
-Each Auction has one player attached to it, and Managers can join (follow) or bid on that auction. With each bid, price of that auction goes up by 1, and if bid is done in last 5 seconds before auctions end, then auction is prolonged by 5 seconds. When auction ends no new bids will be allowed. Each 10 minutes 10 new auctions are created. 
+## Implementation Overview
+There are Auctions, Managers, Players, and Bids.
+Each Auction has one player attached to it, and Managers can join (follow) or bid on that auction. With each bid, the price of that auction goes up by 1, and if bid is done in last 5 seconds before the auction ends, then the auction is prolonged by 5 seconds. When an auction ends, no new bids will be allowed. Every 10 minutes 10 new auctions are created. 
  
-Managers are notified about new auctions, when auctions that they joined are ended, and when there is new bid on auction that they joined.
+Managers are notified about new auctions when auctions that they joined are ended and when there is a new bid on an auction that they joined.
  
 ## Running the backend
-Please edit `application.properties` before running the backend as DB connection details it needs to be configured. You can also set SMTP config if you want to use your own.
+Please edit `application.properties` before running the backend, as DB connection details need to be configured. You can also set SMTP config if you want to use your own.
  
 ## Endpoints 
 Endpoints that are implemented and can be used by Frontend are:
@@ -98,7 +98,7 @@ Response:
 ```
  
 ### Managers auctions endpoint
-This endpoint returns all auctions that manager follows or has bid on.
+This endpoint returns all auctions that the manager follows or has bid on.
 ```
 GET /managers/{managerId}/auctions
 Response: 
@@ -123,7 +123,7 @@ Response:
 ]
 ```
  
-### Auction and it's bids
+### Auction and its bids
 Returns auction details and bids on that auction
 ```
 Reponse: 
@@ -198,7 +198,7 @@ Response: {
 ```
  
 ### Bid on an auction
-This endpoint allows manager to bid on auction (in addition in follows the auction).
+This endpoint allows the manager to bid on an auction (in addition, in follows the auction).
 ```
 POST /auctions/{auctionId}/bid?managerId={managerId}
 Response: 
@@ -235,8 +235,8 @@ Response:
 }
 ```
  
-### Players endpint
-This endpoint allows manager to bid on auction (in addition in follows the auction).
+### Players endpoint
+This endpoint allows the manager to bid on an auction (in addition, in follows the auction).
 ```
 POST /players
 Response: 
