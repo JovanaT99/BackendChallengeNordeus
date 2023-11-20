@@ -11,4 +11,6 @@ public interface AuctionService {
 
     Follow placeFollow(Long auctionId, Long managerId);
 
+    Object auctionWithBids(Long auctionId);
+
 }

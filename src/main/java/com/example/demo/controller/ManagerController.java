@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/manager")
+@RequestMapping("/managers")
 @AllArgsConstructor
 
 public class ManagerController {

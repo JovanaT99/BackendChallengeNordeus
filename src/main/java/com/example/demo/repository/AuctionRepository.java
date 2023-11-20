@@ -11,13 +11,12 @@ import java.util.List;
 
 @Repository
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
-    @Query("SELECT a FROM Auction a WHERE a.endAt > :currentTime")
-    List<Auction> findByEndAtAfter(LocalDateTime currentTime);
+    @Query("SELECT a FROM Auction a JOIN FETCH a.player WHERE a.endAt > :currentTime")
+    List<Auction> findByEndAtBefore(LocalDateTime currentTime);
 
     @Query("SELECT f.auction FROM Follow f " +
-            "WHERE f.manager.id = :managerId " +
-            "AND f.auction.endAt > :currentTime")
-    List<Auction> findAllForManager(@Param("managerId") Long managerId, @Param("currentTime") LocalDateTime currentTime);
+            "WHERE f.manager.id = :managerId ")
+    List<Auction> findAllForManager(@Param("managerId") Long managerId);
 
 
     @Query("SELECT a FROM Auction a " +

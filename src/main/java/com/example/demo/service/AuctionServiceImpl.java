@@ -41,6 +41,19 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public Object auctionWithBids(Long auctionId) {
+        Optional<Auction> optionalAuction = auctionRepository.findById(auctionId);
+        if (optionalAuction.isEmpty()) {
+            throw new IllegalArgumentException("Aukcija sa datim ID-om ne postoji.");
+        }
+
+        return new Object() {
+            public final Auction auction = optionalAuction.get();
+            public final List<Bid> bids = bidRepository.findByAuctionIdOrderByIdDesc(auctionId);
+        };
+    }
+
+    @Override
     public Bid placeBid(Long auctionId, Long managerId) {
         Optional<Auction> optionalAuction = auctionRepository.findById(auctionId);
         if (optionalAuction.isEmpty()) {

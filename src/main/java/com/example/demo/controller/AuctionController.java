@@ -24,28 +24,25 @@ public class AuctionController {
     private final AuctionRepository auctionRepository;
     private final AuctionService auctionService;
 
-    private final PlayerRepository playerRepository;
-
     @Autowired
-    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService, PlayerRepository playerRepository) {
+    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService) {
         this.auctionRepository = auctionRepository;
         this.auctionService = auctionService;
-        this.playerRepository = playerRepository;
     }
 
 
     @GetMapping
     public List<Auction> getAuctionsEndAtAfterCurrentTime() {
         LocalDateTime currentTime = LocalDateTime.now();
-        return auctionRepository.findByEndAtAfter(currentTime);
+        return auctionRepository.findByEndAtBefore(currentTime);
     }
 
-    @GetMapping("/player")
-    public List<Player> findAll() {
-        return playerRepository.findAll();
+    @GetMapping("{auctionId}")
+    public Object getAuctionAndBids(
+            @PathVariable Long auctionId
+    ) {
+        return auctionService.auctionWithBids(auctionId);
     }
-
-
 
     @PostMapping("/{auctionId}/bid")
     public ResponseEntity<Bid> postaviPonudu(
