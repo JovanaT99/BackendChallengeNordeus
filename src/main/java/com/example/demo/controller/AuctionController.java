@@ -26,20 +26,16 @@ public class AuctionController {
 
     private final PlayerRepository playerRepository;
 
-    private final MailService mailService;
-
     @Autowired
-    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService, PlayerRepository playerRepository, MailService mailService) {
+    public AuctionController(AuctionRepository auctionRepository, AuctionService auctionService, PlayerRepository playerRepository) {
         this.auctionRepository = auctionRepository;
         this.auctionService = auctionService;
         this.playerRepository = playerRepository;
-        this.mailService = mailService;
     }
 
 
     @GetMapping
     public List<Auction> getAuctionsEndAtAfterCurrentTime() {
-        mailService.sendTextEmail("jovanablagojevic98@gmail.com","test","testing");
         LocalDateTime currentTime = LocalDateTime.now();
         return auctionRepository.findByEndAtAfter(currentTime);
     }
